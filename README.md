@@ -1,6 +1,6 @@
 ## Context
 
-Learning the very basics of Java through a Open Classrooms course.
+Learning the very basics of Java through an Open Classrooms course.
 
 The last part of the course involves making a basic todo list (the usual), for which i decided to make a separate repo.
 Since it is just a training course on the basics of java, there won't be a dedicated user interface and actions will be performed through a command line interface.
