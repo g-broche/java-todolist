@@ -16,11 +16,11 @@ public class TaskList {
     /**
      * Constructs a new TaskList object
      * @param topicName name for the global topic the list of tasks are associated with
-     * @throws IOException
+     * @throws IllegalArgumentException
      */
-    public TaskList(String topicName) throws IOException{
+    public TaskList(String topicName) throws IllegalArgumentException{
         if (topicName.length() == 0){
-            throw new IOException("The name of a topic must not be null"); 
+            throw new IllegalArgumentException("The name of a topic must not be null"); 
         }
         this.topic = topicName;
     }
@@ -28,14 +28,14 @@ public class TaskList {
     /**
      * Adds a new task to the list after performing input checks
      * @param newTaskName
-     * @throws IOException
+     * @throws IllegalArgumentException
      */
-    public void addTask(String newTaskName) throws IOException{
+    public void addTask(String newTaskName) throws IllegalArgumentException{
         if (newTaskName.length() == 0){
-            throw new IOException("The name of a task must not be null"); 
+            throw new IllegalArgumentException("The name of a task must not be null"); 
         }
         if (this.doesTaskExistsInList(newTaskName)){
-            throw new IOException("A task with this name has already been listed"); 
+            throw new IllegalArgumentException("A task with this name has already been listed"); 
         }
         this.tasks.add(newTaskName);   
     }
