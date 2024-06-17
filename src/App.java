@@ -1,13 +1,10 @@
+import java.util.Map;
 import java.util.Scanner;
 import Utils.Communication;
+import Utils.Validators;
 
 public class App {
-    enum availableActions {
-        CREATE,
-        ADD,
-        HELP,
-        STOP
-    };
+
     public static void main(String[] args) throws Exception {
         Scanner inputScanner = new Scanner(System.in);
         run(inputScanner);
@@ -22,52 +19,43 @@ public class App {
         boolean keepAlive = true;
         do {
             String userRequest = Utils.Communication.requestUserAction(inputScanner, "Select an action to perform");
-            if (!isActionValid(userRequest)){
+            Map<String, String> parsedInput = Validators.parseInput(userRequest);
+            if(parsedInput == null){
+                Utils.Communication.writeErrorFeedback("No command was inputed");
+                continue;
+            }
+            if (!Validators.isActionValid(parsedInput.get("command"))){
                 Utils.Communication.writeErrorFeedback("There is no command called '"+userRequest+"'");
                 continue;
             }
-            performRequestedAction(userRequest.toUpperCase());
+            performRequestedAction(parsedInput.get("command"), parsedInput.get("argument"));
         } while (keepAlive);
     }
 
-    private static void performRequestedAction(String action){
-        switch (action) {
+    private static void performRequestedAction(String actionType, String actionArgument){
+        switch (actionType.toUpperCase()) {
             case "CREATE":
                 //create new list
-                Utils.Communication.writeSuccessFeedback("placeholder : create list");
+                Utils.Communication.writeSuccessFeedback("placeholder - create list: "+actionArgument);
                 break;
 
             case "ADD":
                 //Add task to list
-                Utils.Communication.writeSuccessFeedback("placeholder : add task");
+                Utils.Communication.writeSuccessFeedback("placeholder - add task: "+actionArgument);
                 break;
 
             case "STOP":
                 //Stop input reading
-                Utils.Communication.writeSuccessFeedback("placeholder : stop scanner");
+                Utils.Communication.writeSuccessFeedback("placeholder - stop scanner");
                 break;
 
             case "HELP":
                 //write list of commands in terminal
-                Utils.Communication.writeSuccessFeedback("placeholder : display available commands");
+                Utils.Communication.writeSuccessFeedback("placeholder - display available commands");
                 break;
         
             default:
                 break;
-        }
-    }
-
-    /**
-     * Checks if an input correspond to an allowed action from the availableActions enum
-     * @param action submitted action in the form of a string
-     * @return true if action is allowed, false otherwise
-     */
-    private static boolean isActionValid(String action){
-        try {
-            availableActions.valueOf(action.toUpperCase());
-            return true;
-        } catch (IllegalArgumentException e) {
-            return false;
         }
     }
 }
