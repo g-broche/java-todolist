@@ -1,8 +1,9 @@
 package ToDoList;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import Utils.Communication;
 
 /**
  * TaskList
@@ -10,7 +11,7 @@ import java.util.List;
  * the associated list of tasks
  */
 public class TaskList {
-    private String topic;
+    private String label;
     private List<String> tasks = new ArrayList<String>();
 
     /**
@@ -18,26 +19,52 @@ public class TaskList {
      * @param topicName name for the global topic the list of tasks are associated with
      * @throws IllegalArgumentException
      */
-    public TaskList(String topicName) throws IllegalArgumentException{
-        if (topicName.length() == 0){
-            throw new IllegalArgumentException("The name of a topic must not be null"); 
+    public TaskList(String Listlabel) throws IllegalArgumentException{
+        if (Listlabel.length() == 0){
+            throw new IllegalArgumentException("The name of a list must not be null"); 
         }
-        this.topic = topicName;
+        this.label = Listlabel;
+    }
+
+    /**
+     * Gets label of this instance of TaskList
+     * @return TaskList label
+     */
+    public String getLabel(){
+        return this.label;
+    }
+
+    /**
+     * Gets list of task featured in this TaskList
+     * @return List of the string representing each task
+     */
+    public List<String> getTasks(){
+        return this.tasks;
+    }
+
+    /**
+     * Checks if a specific task is present inside this list's tasks
+     * @param taskName Name of task to look for
+     * @return True if task is present, false otherwise
+     */
+    public boolean containsTask(String taskName){
+        return this.tasks.contains(taskName);
     }
 
     /**
      * Adds a new task to the list after performing input checks
-     * @param newTaskName
+     * @param newTaskName name of task to add
+     * @return true if the collection changed implying the task was added
      * @throws IllegalArgumentException
      */
-    public void addTask(String newTaskName) throws IllegalArgumentException{
+    public boolean addTask(String newTaskName) throws IllegalArgumentException{
         if (newTaskName.length() == 0){
             throw new IllegalArgumentException("The name of a task must not be null"); 
         }
         if (this.doesTaskExistsInList(newTaskName)){
             throw new IllegalArgumentException("A task with this name has already been listed"); 
         }
-        this.tasks.add(newTaskName);   
+        return this.tasks.add(newTaskName);   
     }
 
     // implement modifyTask
@@ -45,6 +72,14 @@ public class TaskList {
     // implement removeTask
 
     // implement displayTaskList
+    public void displayTaskList(){
+        if(this.tasks.isEmpty()){
+            Communication.printMessage("The list "+this.label+" is currently empty!");
+            return;
+        }
+        Communication.printMessage("Displaying content of list "+this.label+":");
+        Communication.printStringCollection(tasks);
+    }
 
     /**
      * Checks if a tasks is present in the instance tasks attribute

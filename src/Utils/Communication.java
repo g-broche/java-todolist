@@ -43,4 +43,36 @@ final public class Communication {
 		String userInput = scanner.nextLine(); 
         return userInput;
     }
+
+    /**
+     * print a message to terminal using regular out stream
+     * @param message
+     */
+    public static void printMessage(String message){
+            System.out.println(message);
+    }
+    /**
+     * For an iterable of strings, print to terminal every string contained in the collection
+     * @param iterable iterable containing String elements
+     */
+    public static void printStringCollection(Iterable<String> iterable){
+        for (String stringItem : iterable) {
+            System.out.println(" -> "+stringItem);
+        }
+    }
+    /**
+     * Print a feedback for user based on a boolean to define if must print success or error feedback
+     * @param isSuccess 
+     * @param messageSuccess
+     * @param messageError
+     */
+    public static void printInstructionResult(boolean isSuccess, String messageSuccess, String messageError){
+        if(!isSuccess){
+            messageError = messageError == null ? "An error occurred" : messageError; 
+            Utils.Communication.writeErrorFeedback(messageError);
+            return;
+        }
+        messageSuccess = messageSuccess == null ? "The operation was successful" : messageSuccess; 
+        Utils.Communication.writeSuccessFeedback(messageSuccess);
+    }
 }
