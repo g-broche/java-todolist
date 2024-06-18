@@ -47,7 +47,7 @@ public class TaskList {
      * @param taskName Name of task to look for
      * @return True if task is present, false otherwise
      */
-    public boolean containsTask(String taskName){
+    public boolean containsTaskName(String taskName){
         return this.tasks.contains(taskName);
     }
 
@@ -70,6 +70,23 @@ public class TaskList {
     // implement modifyTask
 
     // implement removeTask
+    public boolean removeTask(int indexToRemove){
+        try {
+            String taskToRemoved = this.tasks.remove(indexToRemove);
+            boolean isSuccess = !taskToRemoved.isEmpty();
+            Communication.printInstructionResult(
+                isSuccess,
+                "Task <"+taskToRemoved+"> has been removed",
+                "Failed to remove task at index "+indexToRemove
+                );
+            return isSuccess;
+        } catch (Exception e) {
+            Communication.writeErrorFeedback(e.getMessage());
+            return false;
+        }
+        
+        
+    }
 
     // implement displayTaskList
     public void displayTaskList(){

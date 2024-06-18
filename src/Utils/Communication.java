@@ -3,15 +3,21 @@ package Utils;
 import java.util.Scanner;
 
 final public class Communication {
+    final static String messageRequestInput = ">>> ";
+    final static String messageSuccessPrefix = "** ";
+    final static String messageErrorPrefix = "!! ";
+    final static String messageActionPrefix = "-> ";
+    final static String messageListingPrefix = "++ ";
+
     /**
      * sent message to terminal on successful operation using the out stream
      * @param message
      */
     public static void writeSuccessFeedback(String message){
         if (message.length() == 0){
-            System.out.println("The operation has been performed");
+            System.out.println(Communication.messageSuccessPrefix+"The operation has been performed");
         }
-        System.out.println("Success: "+message);
+        System.out.println(Communication.messageSuccessPrefix+"Success: "+message);
     }
 
     /**
@@ -20,10 +26,34 @@ final public class Communication {
      */
     public static void writeErrorFeedback(String message){
         if (message.length() == 0){
-            System.err.println("An error occured while performing the operation");
+            System.err.println(Communication.messageErrorPrefix+"An error occured while performing the operation");
         }
-        System.err.println("Error: "+message);
+        System.err.println(Communication.messageErrorPrefix+"Error: "+message);
     }
+
+    /**
+     * print a message to terminal using regular out stream
+     * @param message
+     */
+    public static void printMessage(String message){
+        System.out.println(Communication.messageActionPrefix+message);
+    }   
+
+    /**
+     * print a message to terminal using regular out stream requesting a user input
+     * @param message
+     */
+    public static void printRequestForInputMessage(String message){
+        System.out.println(Communication.messageRequestInput+message);
+    }  
+    
+    /**
+     * print a message to terminal using regular out stream for listing items
+     * @param message
+     */
+    public static void printRequestListItem(String message){
+        System.out.println(Communication.messageListingPrefix+message);
+    }   
 
     /**
      * Request input from user
@@ -39,25 +69,20 @@ final public class Communication {
         if(messagePrompt == null){
             throw new IllegalArgumentException("User is missing prompt for next action");
         }
-        System.out.println(messagePrompt);
+        Communication.printRequestForInputMessage(messagePrompt);
 		String userInput = scanner.nextLine(); 
         return userInput;
     }
 
     /**
-     * print a message to terminal using regular out stream
-     * @param message
-     */
-    public static void printMessage(String message){
-            System.out.println(message);
-    }
-    /**
      * For an iterable of strings, print to terminal every string contained in the collection
      * @param iterable iterable containing String elements
      */
     public static void printStringCollection(Iterable<String> iterable){
+        int index = 0;
         for (String stringItem : iterable) {
-            System.out.println(" -> "+stringItem);
+            Communication.printRequestListItem("["+index+"]"+stringItem);
+            index++;
         }
     }
     /**

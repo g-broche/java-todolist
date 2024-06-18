@@ -4,10 +4,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import ToDoList.TaskList;
+
 public class Validators {
     enum availableActions {
         CREATE,
         ADD,
+        DEL,
         SHOW,
         HELP,
         STOP
@@ -61,6 +64,39 @@ public class Validators {
             return true;
         } catch (IllegalArgumentException e) {
             return false;
+        }
+    }
+
+    /**
+     * Validate the inputed task index to remove from the list
+     * @param indexInput String corresponding to the required index value for task removal
+     * @param taskList TaskList from which a task removal request is ongoing
+     * @return
+     */
+    public static Integer validateTaskRemovalRequest(String indexInput, TaskList taskList){
+        try {
+            int indexToRemove = Integer.parseInt(indexInput);
+            int taskListedAmount = taskList.getTasks().size();
+            if(taskListedAmount == 0){
+                Communication.writeErrorFeedback("The list is empty, nothing to remove");
+                return null;
+            }
+            if(indexToRemove < 0){
+                Communication.writeErrorFeedback("The index value must be above or equal to 0");
+                return null;
+            }
+            if(indexToRemove >= taskListedAmount){
+                Communication.writeErrorFeedback("The max valid index for removal is "+(taskListedAmount-1));
+                return null;
+            }
+            return indexToRemove;
+        } catch (NumberFormatException e) {
+            Communication.writeErrorFeedback("The input index must be a valid integer value");
+            return null;
+
+        } catch (Exception e) {
+            Communication.writeErrorFeedback("An error occurred while validating the input");
+            return null;
         }
     }
 }

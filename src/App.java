@@ -7,6 +7,4 @@ public class App {
         ToDo toDo = new ToDo();
         toDo.run(inputScanner);
     }
-
-
 }

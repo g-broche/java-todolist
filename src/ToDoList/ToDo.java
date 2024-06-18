@@ -54,10 +54,14 @@ public class ToDo {
                 case "ADD":
                     this.activeList.addTask(actionArgument);
                     Utils.Communication.printInstructionResult(
-                        this.activeList.containsTask(actionArgument),
+                        this.activeList.containsTaskName(actionArgument),
                         "Added task to list: "+this.activeList.getLabel(),
                         "The task could not be added to list (list: <"+this.activeList.getLabel()+"> ; task: <"+actionArgument+">)"
                     );
+                    break;
+
+                case "DEL":
+                    this.handleTaskRemovalFromList(actionArgument, this.activeList);
                     break;
 
                 case "SHOW":
@@ -81,6 +85,20 @@ public class ToDo {
         } catch (Exception e) {
             Communication.writeErrorFeedback(e.getMessage());
         }
+    }
 
+    /**
+     * Handle the process and user interaction involved in the removal of task from a list
+     * @param inputedIndex user inputed index in string format for the task to remove
+     * @param taskList task list from which the task must be removed
+     */
+    private void handleTaskRemovalFromList(String inputedIndex, TaskList taskList){
+        Integer indexToRemove = Validators.validateTaskRemovalRequest(inputedIndex, taskList);
+        boolean isRequestValid = indexToRemove != null;
+        if(!isRequestValid){
+            //handle error logic here
+            return;
+        }
+        taskList.removeTask(indexToRemove);
     }
 }
