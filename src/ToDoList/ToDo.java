@@ -107,8 +107,8 @@ public class ToDo {
         if(Validators.isStringNullOrEmptyorBlank(labelInput)){
             labelInput = this.requestForUserInputedArgument("Input the name of the list to create");
         }
-        boolean isRequestValid = !Validators.isStringNullOrEmptyorBlank(labelInput);
-        if(!isRequestValid){
+        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyorBlank(labelInput);
+        if(isRequestedInputStillNull){
             Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
             return;
         }
@@ -122,7 +122,7 @@ public class ToDo {
         boolean isListCreated = this.activeList.getLabel() == newListName;
         Utils.Communication.printInstructionResult(
             isListCreated,
-            "added - list: "+newListName,
+            "added list: \""+newListName+"\"",
             "The new list was not created for an unspecified reason"
         );
     }
@@ -136,16 +136,20 @@ public class ToDo {
         if(Validators.isStringNullOrEmptyorBlank(taskNameInput)){
             taskNameInput = this.requestForUserInputedArgument("Input the task to add to list \""+this.activeList.getLabel()+"\"");
         }
-        boolean isRequestValid = !Validators.isStringNullOrEmptyorBlank(taskNameInput);
-        if(!isRequestValid){
+        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyorBlank(taskNameInput);
+        if(isRequestedInputStillNull){
             Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
             return;
         }
         String newTask = taskNameInput;
+        if(taskList.doesTaskExistsInList(newTask)){
+            Communication.printErrorFeedback("Action cancelled, there is already a task named \""+newTask+"\" in list \""+taskList.getLabel()+"\"");
+            return;
+        }
         this.activeList.addTask(newTask);
         Utils.Communication.printInstructionResult(
             this.activeList.containsTaskName(newTask),
-            "Added task to list: "+this.activeList.getLabel(),
+            "Added \""+newTask+"\" to list: "+this.activeList.getLabel(),
             "The task could not be added to list (list: <"+this.activeList.getLabel()+"> ; task: <"+newTask+">)"
         );
     }
@@ -156,10 +160,19 @@ public class ToDo {
      * @param taskList task list from which the task must be removed
      */
     private void handleTaskRemovalFromList(String inputedIndex, TaskList taskList){
+        if(Validators.isStringNullOrEmptyorBlank(inputedIndex)){
+            taskList.displayTaskList();
+            inputedIndex = this.requestForUserInputedArgument("Input the number index of the task to remove");
+        }
+        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyorBlank(inputedIndex);
+        if (isRequestedInputStillNull) {
+            Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
+            return;
+        }
         Integer indexToRemove = Validators.validateTaskRemovalRequest(inputedIndex, taskList);
         boolean isRequestValid = indexToRemove != null;
         if(!isRequestValid){
-            //handle error logic here
+            Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
             return;
         }
         taskList.removeTask(indexToRemove);
@@ -191,6 +204,11 @@ public class ToDo {
         return false;
     }
 
+    /**
+     * Request input from user
+     * @param requestPrompt message to display to the user for the request
+     * @return input sent by the user
+     */
     private String requestForUserInputedArgument(String requestPrompt){
         try {
             String userInput = Utils.Communication.requestUserAction(this.inputScanner, requestPrompt);

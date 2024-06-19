@@ -103,7 +103,7 @@ public class TaskList {
      * @param taskName
      * @return true if task is present and false otherwise
      */
-    private boolean doesTaskExistsInList(String taskName){
+    public boolean doesTaskExistsInList(String taskName){
         return this.tasks.contains(taskName);
     }
 }
