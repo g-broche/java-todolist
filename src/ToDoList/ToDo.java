@@ -132,12 +132,16 @@ public class ToDo {
      * @param newTask user inputed name for the task to add
      * @param taskList task list to which the task must be added
      */
-    private void handleTaskAdditionToList(String newTask, TaskList taskList){
-        boolean isRequestValid = newTask != null;
+    private void handleTaskAdditionToList(String taskNameInput, TaskList taskList){
+        if(Validators.isStringNullOrEmptyorBlank(taskNameInput)){
+            taskNameInput = this.requestForUserInputedArgument("Input the task to add to list \""+this.activeList.getLabel()+"\"");
+        }
+        boolean isRequestValid = !Validators.isStringNullOrEmptyorBlank(taskNameInput);
         if(!isRequestValid){
-            //handle error logic here
+            Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
             return;
         }
+        String newTask = taskNameInput;
         this.activeList.addTask(newTask);
         Utils.Communication.printInstructionResult(
             this.activeList.containsTaskName(newTask),
