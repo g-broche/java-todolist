@@ -95,7 +95,7 @@ final public class Communication {
     public static void printAllListlabels(Iterable<TaskList> TaskListIterable){
         int index = 0;
         for (TaskList taskList : TaskListIterable) {
-            Communication.printRequestListItem("["+index+"]"+taskList.getLabel());
+            Communication.printRequestListItem("["+index+"] "+taskList.getLabel());
             index++;
         }
     }

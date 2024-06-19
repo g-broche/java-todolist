@@ -72,7 +72,6 @@ public class ToDo {
             Validators.availableActions action = Validators.availableActions.valueOf(actionType.toUpperCase());
 
             switch (action) {
-                /* ***** NEED TO IMPLEMENT LOGIC FOR COMMAND REQUIRING ARGUMENT PARAMETER OR NOT ***** */
                 //creates new TaskList with the provided label 
                 case CREATE:
                     this.handleListCreation(actionArgument);
@@ -80,15 +79,21 @@ public class ToDo {
     
                 //add new task to the current active list
                 case ADD:
-                    this.handleTaskAdditionToList(actionArgument, this.activeList);
+                    if(this.isActiveListValid()){
+                        this.handleTaskAdditionToList(actionArgument, this.activeList);
+                    }
                     break;
 
                 case DEL:
-                    this.handleTaskRemovalFromList(actionArgument, this.activeList);
+                    if(this.isActiveListValid()){
+                        this.handleTaskRemovalFromList(actionArgument, this.activeList);
+                    }
                     break;
 
                 case SHOW:
-                    this.activeList.displayTaskList();
+                    if(this.isActiveListValid()){
+                        this.activeList.displayTaskList();
+                    }
                     break;
 
                 case SHOWALL:
@@ -102,11 +107,11 @@ public class ToDo {
                 case SWITCH:
                     this.handleActiveListSwitch(actionArgument);
                     break;
-    
+
                 case STOP:
                     mustKeepRunning = false;
                     break;
-    
+
                 case HELP:
                     Utils.Communication.printCommandList();
                     break;
@@ -145,7 +150,7 @@ public class ToDo {
         boolean isListCreated = this.activeList.getLabel() == newListName;
         Utils.Communication.printInstructionResult(
             isListCreated,
-            "added list: \""+newListName+"\"",
+            "added and switched to list: \""+newListName+"\"",
             "The new list was not created for an unspecified reason"
         );
     }
@@ -294,10 +299,25 @@ public class ToDo {
         return this.lists.indexOf(list);
     }
 
+    /**
+     * Display the content of all managed TaskList
+     */
     private void displayAllListsContent(){
         Communication.printMessage("Listing content of all lists");
         for (TaskList taskList : lists) {
             taskList.displayTaskList();
         }
+    }
+
+    /**
+     * Check if ToDo.activeList is a valid instance of TaskList, will print error message if not
+     * @return true if activeList is not null and instance of TaskList
+     */
+    private boolean isActiveListValid(){
+        boolean isValid = this.activeList != null && this.activeList instanceof TaskList;
+        if(!isValid){
+            Communication.printErrorFeedback("A list must be active for this command to work");
+        }
+        return isValid;
     }
 }
