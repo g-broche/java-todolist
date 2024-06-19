@@ -18,8 +18,11 @@ public class ToDo {
      */
     public void run(Scanner inputScanner){
         boolean keepAlive = true;
+        boolean isFirstAction = true;
         do {
-            String userRequest = Utils.Communication.requestUserAction(inputScanner, "Select an action to perform");
+            String requestPrompt = isFirstAction? "Select an action to perform (type 'help' for command list)" : "Select an action to perform";
+            isFirstAction = false;
+            String userRequest = Utils.Communication.requestUserAction(inputScanner, requestPrompt);
             Map<String, String> parsedInput = Validators.parseInput(userRequest);
             if(parsedInput == null){
                 Utils.Communication.printErrorFeedback("No command was inputed");
@@ -76,7 +79,7 @@ public class ToDo {
     
                 case HELP:
                     //write list of commands in terminal
-                    Utils.Communication.printSuccessFeedback("placeholder - display available commands");
+                    Utils.Communication.printCommandList();
                     break;
                 default:
                     break;

@@ -103,5 +103,6 @@ final public class Communication {
 
     public static void printCommandList(){
         String[] commands = Validators.getCommandList();
+        Communication.printMessage("Available commands: "+String.join(", ", commands));
     }
 }
