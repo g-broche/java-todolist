@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-
 import Utils.Communication;
 import Utils.Validators;
 
@@ -68,9 +67,8 @@ public class ToDo {
     private boolean performRequestedAction(String actionType, String actionArgument){
         boolean mustKeepRunning = true;
         try {
-            //use enum to tie switch cases to the enum used for validation to prevent more consistency and 
+            //use enum to tie switch cases to the enum used for validation to add more consistency
             Validators.availableActions action = Validators.availableActions.valueOf(actionType.toUpperCase());
-
             switch (action) {
                 //creates new TaskList with the provided label 
                 case CREATE:
@@ -123,7 +121,6 @@ public class ToDo {
         } catch (Exception e) {
             Communication.printErrorFeedback(e.getMessage());
         }
-
         return mustKeepRunning;
     }
 

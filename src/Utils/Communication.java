@@ -1,7 +1,6 @@
 package Utils;
 
 import java.util.Scanner;
-
 import ToDoList.TaskList;
 
 final public class Communication {

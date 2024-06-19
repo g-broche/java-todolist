@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import ToDoList.TaskList;
 
 public class Validators {
+    /**
+     * Defines allowed user command which correspond to the first word of user inputs
+     */
     public enum availableActions {
         CREATE,
         ADD,

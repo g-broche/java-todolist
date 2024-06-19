@@ -2,7 +2,6 @@ package ToDoList;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import Utils.Communication;
 
 /**
@@ -67,7 +66,11 @@ public class TaskList {
         return this.tasks.add(newTaskName);   
     }
 
-    // implement removeTask
+    /**
+     * Removes a task from a list based on a given index
+     * @param indexToRemove
+     * @return true if task was removed
+     */
     public boolean removeTask(int indexToRemove){
         try {
             String taskToRemoved = this.tasks.remove(indexToRemove);
