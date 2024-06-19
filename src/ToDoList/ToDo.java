@@ -52,18 +52,12 @@ public class ToDo {
                 /* ***** NEED TO IMPLEMENT LOGIC FOR COMMAND REQUIRING ARGUMENT PARAMETER OR NOT ***** */
                 //creates new TaskList with the provided label 
                 case CREATE:
-                    this.activeList = new TaskList(actionArgument);
-                    Utils.Communication.printSuccessFeedback("added - list: "+this.activeList.getLabel());
+                    this.handleListCreation(actionArgument);
                     break;
     
                 //add new task to the current active list
                 case ADD:
-                    this.activeList.addTask(actionArgument);
-                    Utils.Communication.printInstructionResult(
-                        this.activeList.containsTaskName(actionArgument),
-                        "Added task to list: "+this.activeList.getLabel(),
-                        "The task could not be added to list (list: <"+this.activeList.getLabel()+"> ; task: <"+actionArgument+">)"
-                    );
+                    this.handleTaskAdditionToList(actionArgument, this.activeList);
                     break;
 
                 case DEL:
@@ -72,6 +66,10 @@ public class ToDo {
 
                 case SHOW:
                     this.activeList.displayTaskList();
+                    break;
+
+                case SHOWALL:
+                    this.displayAllListsLabels();
                     break;
     
                 case STOP:
@@ -94,6 +92,50 @@ public class ToDo {
     }
 
     /**
+     * Handle the process and user interaction involved in the creation of a new list
+     * @param newTask user inputed name for the task to add
+     * @param taskList task list to which the task must be added
+     */
+    private void handleListCreation(String newListName){
+        boolean isRequestValid = newListName != null;
+        if(!isRequestValid){
+            //handle error logic here
+            return;
+        }
+        if(this.doesTaskListExists(newListName)){
+            Communication.printErrorFeedback("Action cancelled, there is already a list with the label \""+newListName+"\"");
+            return;
+        }
+        this.activeList = new TaskList(newListName);
+        this.lists.add(this.activeList);
+        boolean isListCreated = this.activeList.getLabel() == newListName;
+        Utils.Communication.printInstructionResult(
+            isListCreated,
+            "added - list: "+newListName,
+            "The new list was not created for an unspecified reason"
+        );
+    }
+
+    /**
+     * Handle the process and user interaction involved in the addition of task to a list
+     * @param newTask user inputed name for the task to add
+     * @param taskList task list to which the task must be added
+     */
+    private void handleTaskAdditionToList(String newTask, TaskList taskList){
+        boolean isRequestValid = newTask != null;
+        if(!isRequestValid){
+            //handle error logic here
+            return;
+        }
+        this.activeList.addTask(newTask);
+        Utils.Communication.printInstructionResult(
+            this.activeList.containsTaskName(newTask),
+            "Added task to list: "+this.activeList.getLabel(),
+            "The task could not be added to list (list: <"+this.activeList.getLabel()+"> ; task: <"+newTask+">)"
+        );
+    }
+
+    /**
      * Handle the process and user interaction involved in the removal of task from a list
      * @param inputedIndex user inputed index in string format for the task to remove
      * @param taskList task list from which the task must be removed
@@ -106,5 +148,26 @@ public class ToDo {
             return;
         }
         taskList.removeTask(indexToRemove);
+    }
+
+    /**
+     * Display the labels of all existing TaskList
+     */
+    public void displayAllListsLabels(){
+        if(this.lists.isEmpty()){
+            Communication.printMessage("There are currently no list being managed");
+            return;
+        }
+        Communication.printMessage("Displaying labels of all currently managed task lists:");
+        Communication.printAllListlabels(this.lists);
+    }
+
+    private boolean doesTaskListExists(String label){
+        for (TaskList taskList : lists) {
+            if (taskList.getLabel().equals(label)){
+                return true;
+            }
+        }
+        return false;
     }
 }

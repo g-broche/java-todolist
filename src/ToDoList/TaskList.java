@@ -86,7 +86,9 @@ public class TaskList {
         
     }
 
-    // implement displayTaskList
+    /**
+     * Display tasks for the TaskList instance
+     */
     public void displayTaskList(){
         if(this.tasks.isEmpty()){
             Communication.printMessage("The list "+this.label+" is currently empty!");

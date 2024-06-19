@@ -12,6 +12,7 @@ public class Validators {
         ADD,
         DEL,
         SHOW,
+        SHOWALL,
         HELP,
         STOP
     };

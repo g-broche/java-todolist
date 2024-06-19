@@ -2,6 +2,8 @@ package Utils;
 
 import java.util.Scanner;
 
+import ToDoList.TaskList;
+
 final public class Communication {
     final static String messageRequestInput = ">>> ";
     final static String messageSuccessPrefix = "** ";
@@ -82,6 +84,18 @@ final public class Communication {
         int index = 0;
         for (String stringItem : iterable) {
             Communication.printRequestListItem("["+index+"]"+stringItem);
+            index++;
+        }
+    }
+
+    /**
+     * For an iterable of strings, print to terminal every string contained in the collection
+     * @param iterable iterable containing String elements
+     */
+    public static void printAllListlabels(Iterable<TaskList> TaskListIterable){
+        int index = 0;
+        for (TaskList taskList : TaskListIterable) {
+            Communication.printRequestListItem("["+index+"]"+taskList.getLabel());
             index++;
         }
     }
