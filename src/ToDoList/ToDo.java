@@ -11,25 +11,33 @@ import Utils.Validators;
 public class ToDo {
     private List<TaskList> lists = new ArrayList<TaskList>();
     private TaskList activeList = null;
+    private Scanner inputScanner = null;
+
+    /**
+     * Construct ToDo class which handles the main logic of the application
+     * @param inputScanner Scanner instance required to read user inputs
+     */
+    public ToDo(Scanner inputScanner){
+        this.inputScanner = inputScanner;
+    }
 
     /**
      * wrapper for the overall loop logic and dialog with the user
-     * @param inputScanner instanced Scanner to read user inputs
      */
-    public void run(Scanner inputScanner){
+    public void run(){
         boolean keepAlive = true;
         boolean isFirstAction = true;
         do {
             String requestPrompt = isFirstAction? "Select an action to perform (type 'help' for command list)" : "Select an action to perform";
             isFirstAction = false;
-            String userRequest = Utils.Communication.requestUserAction(inputScanner, requestPrompt);
-            Map<String, String> parsedInput = Validators.parseInput(userRequest);
+            String userInput = Utils.Communication.requestUserAction(this.inputScanner, requestPrompt);
+            Map<String, String> parsedInput = Validators.parseInput(userInput);
             if(parsedInput == null){
                 Utils.Communication.printErrorFeedback("No command was inputed");
                 continue;
             }
             if (!Validators.isActionValid(parsedInput.get("command"))){
-                Utils.Communication.printErrorFeedback("There is no command called '"+userRequest+"'");
+                Utils.Communication.printErrorFeedback("There is no command called '"+userInput+"'");
                 continue;
             }
             keepAlive = performRequestedAction(parsedInput.get("command"), parsedInput.get("argument"));
@@ -93,15 +101,18 @@ public class ToDo {
 
     /**
      * Handle the process and user interaction involved in the creation of a new list
-     * @param newTask user inputed name for the task to add
-     * @param taskList task list to which the task must be added
+     * @param initialLabelInput user inputed name for the task to add
      */
-    private void handleListCreation(String newListName){
-        boolean isRequestValid = newListName != null;
+    private void handleListCreation(String labelInput){
+        if(Validators.isStringNullOrEmptyorBlank(labelInput)){
+            labelInput = this.requestForUserInputedArgument("Input the name of the list to create");
+        }
+        boolean isRequestValid = !Validators.isStringNullOrEmptyorBlank(labelInput);
         if(!isRequestValid){
-            //handle error logic here
+            Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
             return;
         }
+        String newListName = labelInput;
         if(this.doesTaskListExists(newListName)){
             Communication.printErrorFeedback("Action cancelled, there is already a list with the label \""+newListName+"\"");
             return;
@@ -162,6 +173,11 @@ public class ToDo {
         Communication.printAllListlabels(this.lists);
     }
 
+    /**
+     * Checks if the given label corresponds to an existing TaskList instance label.
+     * @param label label to look for in all managed lists
+     * @return true if a list as the given label, false otherwise
+     */
     private boolean doesTaskListExists(String label){
         for (TaskList taskList : lists) {
             if (taskList.getLabel().equals(label)){
@@ -169,5 +185,15 @@ public class ToDo {
             }
         }
         return false;
+    }
+
+    private String requestForUserInputedArgument(String requestPrompt){
+        try {
+            String userInput = Utils.Communication.requestUserAction(this.inputScanner, requestPrompt);
+            return userInput;
+        } catch (Exception e) {
+            Communication.printErrorFeedback(e.getMessage());
+            return null;
+        }
     }
 }

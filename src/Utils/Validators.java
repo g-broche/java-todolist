@@ -111,4 +111,8 @@ public class Validators {
         }
         return availableCommands;
     }
+
+    public static boolean isStringNullOrEmptyorBlank(String string){
+        return string == null || string.isEmpty() || string.isBlank();
+    }
 }
