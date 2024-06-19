@@ -44,6 +44,11 @@ public class ToDo {
         } while (keepAlive);
     }
 
+    /**
+     * Create prompt message show to user for each run cycle
+     * @param isFirstCycle
+     * @return String for the prompt to use depending on current state
+     */
     private String createUserPromptForRunCycle(boolean isFirstCycle){
         if(isFirstCycle){
             return "Select an action to perform (type 'help' for command list)";
