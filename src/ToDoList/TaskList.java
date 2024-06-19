@@ -79,7 +79,7 @@ public class TaskList {
                 );
             return isSuccess;
         } catch (Exception e) {
-            Communication.writeErrorFeedback(e.getMessage());
+            Communication.printErrorFeedback(e.getMessage());
             return false;
         }
         

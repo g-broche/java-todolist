@@ -78,29 +78,29 @@ public class Validators {
             int indexToRemove = Integer.parseInt(indexInput);
             int taskListedAmount = taskList.getTasks().size();
             if(taskListedAmount == 0){
-                Communication.writeErrorFeedback("The list is empty, nothing to remove");
+                Communication.printErrorFeedback("The list is empty, nothing to remove");
                 return null;
             }
             if(indexToRemove < 0){
-                Communication.writeErrorFeedback("The index value must be above or equal to 0");
+                Communication.printErrorFeedback("The index value must be above or equal to 0");
                 return null;
             }
             if(indexToRemove >= taskListedAmount){
-                Communication.writeErrorFeedback("The max valid index for removal is "+(taskListedAmount-1));
+                Communication.printErrorFeedback("The max valid index for removal is "+(taskListedAmount-1));
                 return null;
             }
             return indexToRemove;
         } catch (NumberFormatException e) {
-            Communication.writeErrorFeedback("The input index must be a valid integer value");
+            Communication.printErrorFeedback("The input index must be a valid integer value");
             return null;
 
         } catch (Exception e) {
-            Communication.writeErrorFeedback("An error occurred while validating the input");
+            Communication.printErrorFeedback("An error occurred while validating the input");
             return null;
         }
     }
 
-    public String[] getCommandList(){
+    static String[] getCommandList(){
         availableActions[] availableActionsValues = availableActions.values();
         int amountOfActions = availableActionsValues.length;
         String[] availableCommands = new String[amountOfActions];

@@ -22,11 +22,11 @@ public class ToDo {
             String userRequest = Utils.Communication.requestUserAction(inputScanner, "Select an action to perform");
             Map<String, String> parsedInput = Validators.parseInput(userRequest);
             if(parsedInput == null){
-                Utils.Communication.writeErrorFeedback("No command was inputed");
+                Utils.Communication.printErrorFeedback("No command was inputed");
                 continue;
             }
             if (!Validators.isActionValid(parsedInput.get("command"))){
-                Utils.Communication.writeErrorFeedback("There is no command called '"+userRequest+"'");
+                Utils.Communication.printErrorFeedback("There is no command called '"+userRequest+"'");
                 continue;
             }
             performRequestedAction(parsedInput.get("command"), parsedInput.get("argument"));
@@ -48,7 +48,7 @@ public class ToDo {
                 //creates new TaskList with the provided label 
                 case CREATE:
                     this.activeList = new TaskList(actionArgument);
-                    Utils.Communication.writeSuccessFeedback("added - list: "+this.activeList.getLabel());
+                    Utils.Communication.printSuccessFeedback("added - list: "+this.activeList.getLabel());
                     break;
     
                 //add new task to the current active list
@@ -71,20 +71,20 @@ public class ToDo {
     
                 case STOP:
                     //Stop input reading
-                    Utils.Communication.writeSuccessFeedback("placeholder - stop scanner");
+                    Utils.Communication.printSuccessFeedback("placeholder - stop scanner");
                     break;
     
                 case HELP:
                     //write list of commands in terminal
-                    Utils.Communication.writeSuccessFeedback("placeholder - display available commands");
+                    Utils.Communication.printSuccessFeedback("placeholder - display available commands");
                     break;
                 default:
                     break;
             }
         } catch (IllegalArgumentException e) {
-            Communication.writeErrorFeedback(e.getMessage());
+            Communication.printErrorFeedback(e.getMessage());
         } catch (Exception e) {
-            Communication.writeErrorFeedback(e.getMessage());
+            Communication.printErrorFeedback(e.getMessage());
         }
     }
 

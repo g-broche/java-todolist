@@ -13,7 +13,7 @@ final public class Communication {
      * sent message to terminal on successful operation using the out stream
      * @param message
      */
-    public static void writeSuccessFeedback(String message){
+    public static void printSuccessFeedback(String message){
         if (message.length() == 0){
             System.out.println(Communication.messageSuccessPrefix+"The operation has been performed");
         }
@@ -24,7 +24,7 @@ final public class Communication {
      * sent message to terminal on error using the err stream
      * @param message
      */
-    public static void writeErrorFeedback(String message){
+    public static void printErrorFeedback(String message){
         if (message.length() == 0){
             System.err.println(Communication.messageErrorPrefix+"An error occured while performing the operation");
         }
@@ -94,10 +94,14 @@ final public class Communication {
     public static void printInstructionResult(boolean isSuccess, String messageSuccess, String messageError){
         if(!isSuccess){
             messageError = messageError == null ? "An error occurred" : messageError; 
-            Utils.Communication.writeErrorFeedback(messageError);
+            Utils.Communication.printErrorFeedback(messageError);
             return;
         }
         messageSuccess = messageSuccess == null ? "The operation was successful" : messageSuccess; 
-        Utils.Communication.writeSuccessFeedback(messageSuccess);
+        Utils.Communication.printSuccessFeedback(messageSuccess);
+    }
+
+    public static void printCommandList(){
+        String[] commands = Validators.getCommandList();
     }
 }
