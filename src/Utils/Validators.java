@@ -71,7 +71,7 @@ public class Validators {
      * Validate the inputed task index to remove from the list
      * @param indexInput String corresponding to the required index value for task removal
      * @param taskList TaskList from which a task removal request is ongoing
-     * @return
+     * @return index to remove as Integer if input is not out of bounds, null otherwise
      */
     public static Integer validateTaskRemovalRequest(String indexInput, TaskList taskList){
         try {

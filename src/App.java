@@ -6,5 +6,6 @@ public class App {
         Scanner inputScanner = new Scanner(System.in);
         ToDo toDo = new ToDo();
         toDo.run(inputScanner);
+        inputScanner.close();
     }
 }

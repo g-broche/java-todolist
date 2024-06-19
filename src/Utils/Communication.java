@@ -101,6 +101,9 @@ final public class Communication {
         Utils.Communication.printSuccessFeedback(messageSuccess);
     }
 
+    /**
+     * print list of available command in the terminal
+     */
     public static void printCommandList(){
         String[] commands = Validators.getCommandList();
         Communication.printMessage("Available commands: "+String.join(", ", commands));

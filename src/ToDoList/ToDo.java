@@ -32,7 +32,7 @@ public class ToDo {
                 Utils.Communication.printErrorFeedback("There is no command called '"+userRequest+"'");
                 continue;
             }
-            performRequestedAction(parsedInput.get("command"), parsedInput.get("argument"));
+            keepAlive = performRequestedAction(parsedInput.get("command"), parsedInput.get("argument"));
         } while (keepAlive);
     }
 
@@ -40,8 +40,10 @@ public class ToDo {
      * Method which will execute the chain of instruction required for the user provided command
      * @param actionType Action required by a user that is allowed by the Validator class
      * @param actionArgument String representing the argument to provide to the required command if it applies
+     * @return true if the program must keep running, false if program must stop after this cycle ends.
      */
-    private void performRequestedAction(String actionType, String actionArgument){
+    private boolean performRequestedAction(String actionType, String actionArgument){
+        boolean mustKeepRunning = true;
         try {
             //use enum to tie switch cases to the enum used for validation to prevent more consistency and 
             Validators.availableActions action = Validators.availableActions.valueOf(actionType.toUpperCase());
@@ -73,12 +75,10 @@ public class ToDo {
                     break;
     
                 case STOP:
-                    //Stop input reading
-                    Utils.Communication.printSuccessFeedback("placeholder - stop scanner");
+                    mustKeepRunning = false;
                     break;
     
                 case HELP:
-                    //write list of commands in terminal
                     Utils.Communication.printCommandList();
                     break;
                 default:
@@ -89,6 +89,8 @@ public class ToDo {
         } catch (Exception e) {
             Communication.printErrorFeedback(e.getMessage());
         }
+
+        return mustKeepRunning;
     }
 
     /**
