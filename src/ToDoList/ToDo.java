@@ -76,8 +76,12 @@ public class ToDo {
                     this.activeList.displayTaskList();
                     break;
 
-                case SHOWALL:
+                case SHOWLISTS:
                     this.displayAllListsLabels();
+                    break;
+
+                case SWITCH:
+                    this.handleActiveListSwitch(actionArgument);
                     break;
     
                 case STOP:
@@ -217,5 +221,57 @@ public class ToDo {
             Communication.printErrorFeedback(e.getMessage());
             return null;
         }
+    }
+
+    /**
+     * Handle switching to a different list
+     * @param inputedIndex inputed index of the list to switch to
+     */
+    private void handleActiveListSwitch(String inputedIndex){
+        if(Validators.isStringNullOrEmptyorBlank(inputedIndex)){
+            this.displayAllListsLabels();
+            String prompt = "Input the number index of the list to switch to (current active list is ["+this.getListIndex(this.activeList)+"])";
+            inputedIndex = this.requestForUserInputedArgument(prompt);
+        }
+        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyorBlank(inputedIndex);
+        if (isRequestedInputStillNull) {
+            Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
+            return;
+        }
+        Integer indexToRemove = Validators.validateListSwitchRequest(inputedIndex, this.lists);
+        boolean isRequestValid = indexToRemove != null;
+        if(!isRequestValid){
+            Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
+            return;
+        }
+        this.switchListTo(indexToRemove);
+    }
+
+    /**
+     * Switch the active list to a different list
+     * @param indexToSwitchTo index of the list to switch to inside of ToDo.lists
+     */
+    private void switchListTo(int indexToSwitchTo){
+        try {
+            int currentActiveListIndex = this.getListIndex(this.activeList);
+            if (currentActiveListIndex == indexToSwitchTo){
+                Communication.printErrorFeedback("No change occured as this is already the active list");
+            }
+            String previousListLabel = this.activeList.getLabel();
+            this.activeList = this.lists.get(indexToSwitchTo);
+            Communication.printSuccessFeedback("Switched from \""+previousListLabel+"\" to \""+this.activeList.getLabel()+"\"");
+        } catch (Exception e) {
+            Communication.printErrorFeedback(e.getMessage());
+        }
+        
+    }
+
+    /**
+     * Gets index of a TaskList instance inside of ToDo.lists
+     * @param list TaskList instance
+     * @return index of list in ToDo.lists
+     */
+    private Integer getListIndex(TaskList list){
+        return this.lists.indexOf(list);
     }
 }

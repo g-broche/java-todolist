@@ -2,6 +2,7 @@ package Utils;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ToDoList.TaskList;
@@ -13,6 +14,8 @@ public class Validators {
         DEL,
         SHOW,
         SHOWALL,
+        SHOWLISTS,
+        SWITCH,
         HELP,
         STOP
     };
@@ -101,6 +104,44 @@ public class Validators {
         }
     }
 
+    
+    /**
+     * Validate the inputed task index to remove from the list
+     * @param indexInput String corresponding to the required index value for task removal
+     * @param taskList TaskList from which a task removal request is ongoing
+     * @return index to remove as Integer if input is not out of bounds, null otherwise
+     */
+    public static Integer validateListSwitchRequest(String indexInput, List<TaskList> lists){
+        try {
+            int indexToRemove = Integer.parseInt(indexInput);
+            int listAmount = lists.size();
+            if(listAmount == 0){
+                Communication.printErrorFeedback("There are no list created at the present time");
+                return null;
+            }
+            if(indexToRemove < 0){
+                Communication.printErrorFeedback("The index value must be above or equal to 0");
+                return null;
+            }
+            if(indexToRemove >= listAmount){
+                Communication.printErrorFeedback("The max valid index for removal is "+(listAmount-1));
+                return null;
+            }
+            return indexToRemove;
+        } catch (NumberFormatException e) {
+            Communication.printErrorFeedback("The input index must be a valid integer value");
+            return null;
+
+        } catch (Exception e) {
+            Communication.printErrorFeedback("An error occurred while validating the input");
+            return null;
+        }
+    }
+
+    /**
+     * gets array of all allowed command
+     * @return array of string
+     */
     static String[] getCommandList(){
         availableActions[] availableActionsValues = availableActions.values();
         int amountOfActions = availableActionsValues.length;
@@ -112,6 +153,11 @@ public class Validators {
         return availableCommands;
     }
 
+    /**
+     * Checks if a string contains a value
+     * @param string
+     * @return true if list is not null, empty or filled with space characters
+     */
     public static boolean isStringNullOrEmptyorBlank(String string){
         return string == null || string.isEmpty() || string.isBlank();
     }
