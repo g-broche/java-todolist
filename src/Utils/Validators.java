@@ -158,7 +158,7 @@ public class Validators {
      * @param string
      * @return true if list is not null, empty or filled with space characters
      */
-    public static boolean isStringNullOrEmptyorBlank(String string){
+    public static boolean isStringNullOrEmptyOrBlank(String string){
         return string == null || string.isEmpty() || string.isBlank();
     }
 }

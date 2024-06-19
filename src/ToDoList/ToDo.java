@@ -28,7 +28,7 @@ public class ToDo {
         boolean keepAlive = true;
         boolean isFirstAction = true;
         do {
-            String requestPrompt = isFirstAction? "Select an action to perform (type 'help' for command list)" : "Select an action to perform";
+            String requestPrompt = this.createUserPromptForRunCycle(isFirstAction);
             isFirstAction = false;
             String userInput = Utils.Communication.requestUserAction(this.inputScanner, requestPrompt);
             Map<String, String> parsedInput = Validators.parseInput(userInput);
@@ -42,6 +42,16 @@ public class ToDo {
             }
             keepAlive = performRequestedAction(parsedInput.get("command"), parsedInput.get("argument"));
         } while (keepAlive);
+    }
+
+    private String createUserPromptForRunCycle(boolean isFirstCycle){
+        if(isFirstCycle){
+            return "Select an action to perform (type 'help' for command list)";
+        }
+        if(this.activeList != null && !Validators.isStringNullOrEmptyOrBlank(this.activeList.getLabel())){
+            return "Select an action to perform (current list: \""+this.activeList.getLabel()+"\")";
+        }
+        return "Select an action to perform";
     }
 
     /**
@@ -76,6 +86,10 @@ public class ToDo {
                     this.activeList.displayTaskList();
                     break;
 
+                case SHOWALL:
+                    this.displayAllListsContent();
+                    break;
+
                 case SHOWLISTS:
                     this.displayAllListsLabels();
                     break;
@@ -108,10 +122,10 @@ public class ToDo {
      * @param initialLabelInput user inputed name for the task to add
      */
     private void handleListCreation(String labelInput){
-        if(Validators.isStringNullOrEmptyorBlank(labelInput)){
+        if(Validators.isStringNullOrEmptyOrBlank(labelInput)){
             labelInput = this.requestForUserInputedArgument("Input the name of the list to create");
         }
-        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyorBlank(labelInput);
+        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyOrBlank(labelInput);
         if(isRequestedInputStillNull){
             Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
             return;
@@ -137,10 +151,10 @@ public class ToDo {
      * @param taskList task list to which the task must be added
      */
     private void handleTaskAdditionToList(String taskNameInput, TaskList taskList){
-        if(Validators.isStringNullOrEmptyorBlank(taskNameInput)){
+        if(Validators.isStringNullOrEmptyOrBlank(taskNameInput)){
             taskNameInput = this.requestForUserInputedArgument("Input the task to add to list \""+this.activeList.getLabel()+"\"");
         }
-        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyorBlank(taskNameInput);
+        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyOrBlank(taskNameInput);
         if(isRequestedInputStillNull){
             Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
             return;
@@ -164,11 +178,11 @@ public class ToDo {
      * @param taskList task list from which the task must be removed
      */
     private void handleTaskRemovalFromList(String inputedIndex, TaskList taskList){
-        if(Validators.isStringNullOrEmptyorBlank(inputedIndex)){
+        if(Validators.isStringNullOrEmptyOrBlank(inputedIndex)){
             taskList.displayTaskList();
             inputedIndex = this.requestForUserInputedArgument("Input the number index of the task to remove");
         }
-        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyorBlank(inputedIndex);
+        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyOrBlank(inputedIndex);
         if (isRequestedInputStillNull) {
             Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
             return;
@@ -228,12 +242,12 @@ public class ToDo {
      * @param inputedIndex inputed index of the list to switch to
      */
     private void handleActiveListSwitch(String inputedIndex){
-        if(Validators.isStringNullOrEmptyorBlank(inputedIndex)){
+        if(Validators.isStringNullOrEmptyOrBlank(inputedIndex)){
             this.displayAllListsLabels();
             String prompt = "Input the number index of the list to switch to (current active list is ["+this.getListIndex(this.activeList)+"])";
             inputedIndex = this.requestForUserInputedArgument(prompt);
         }
-        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyorBlank(inputedIndex);
+        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyOrBlank(inputedIndex);
         if (isRequestedInputStillNull) {
             Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
             return;
@@ -273,5 +287,12 @@ public class ToDo {
      */
     private Integer getListIndex(TaskList list){
         return this.lists.indexOf(list);
+    }
+
+    private void displayAllListsContent(){
+        Communication.printMessage("Listing content of all lists");
+        for (TaskList taskList : lists) {
+            taskList.displayTaskList();
+        }
     }
 }
