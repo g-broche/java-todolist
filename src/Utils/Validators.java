@@ -7,7 +7,7 @@ import java.util.Map;
 import ToDoList.TaskList;
 
 public class Validators {
-    enum availableActions {
+    public enum availableActions {
         CREATE,
         ADD,
         DEL,
@@ -98,5 +98,16 @@ public class Validators {
             Communication.writeErrorFeedback("An error occurred while validating the input");
             return null;
         }
+    }
+
+    public String[] getCommandList(){
+        availableActions[] availableActionsValues = availableActions.values();
+        int amountOfActions = availableActionsValues.length;
+        String[] availableCommands = new String[amountOfActions];
+
+        for (int i = 0; i < amountOfActions; i++) {
+            availableCommands[i] = availableActionsValues[i].name().toLowerCase();
+        }
+        return availableCommands;
     }
 }

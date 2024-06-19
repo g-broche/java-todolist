@@ -67,8 +67,6 @@ public class TaskList {
         return this.tasks.add(newTaskName);   
     }
 
-    // implement modifyTask
-
     // implement removeTask
     public boolean removeTask(int indexToRemove){
         try {

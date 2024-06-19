@@ -40,18 +40,19 @@ public class ToDo {
      */
     private void performRequestedAction(String actionType, String actionArgument){
         try {
-            switch (actionType.toUpperCase()) {
+            //use enum to tie switch cases to the enum used for validation to prevent more consistency and 
+            Validators.availableActions action = Validators.availableActions.valueOf(actionType.toUpperCase());
 
+            switch (action) {
                 /* ***** NEED TO IMPLEMENT LOGIC FOR COMMAND REQUIRING ARGUMENT PARAMETER OR NOT ***** */
-
                 //creates new TaskList with the provided label 
-                case "CREATE":
+                case CREATE:
                     this.activeList = new TaskList(actionArgument);
                     Utils.Communication.writeSuccessFeedback("added - list: "+this.activeList.getLabel());
                     break;
     
                 //add new task to the current active list
-                case "ADD":
+                case ADD:
                     this.activeList.addTask(actionArgument);
                     Utils.Communication.printInstructionResult(
                         this.activeList.containsTaskName(actionArgument),
@@ -60,20 +61,20 @@ public class ToDo {
                     );
                     break;
 
-                case "DEL":
+                case DEL:
                     this.handleTaskRemovalFromList(actionArgument, this.activeList);
                     break;
 
-                case "SHOW":
+                case SHOW:
                     this.activeList.displayTaskList();
                     break;
     
-                case "STOP":
+                case STOP:
                     //Stop input reading
                     Utils.Communication.writeSuccessFeedback("placeholder - stop scanner");
                     break;
     
-                case "HELP":
+                case HELP:
                     //write list of commands in terminal
                     Utils.Communication.writeSuccessFeedback("placeholder - display available commands");
                     break;
