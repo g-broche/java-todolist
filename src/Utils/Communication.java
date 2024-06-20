@@ -3,6 +3,9 @@ package Utils;
 import java.util.Scanner;
 import ToDoList.TaskList;
 
+/**
+ * Class providing static methods to send feedback to user or request for user input
+ */
 final public class Communication {
     final static String messageRequestInput = ">>> ";
     final static String messageSuccessPrefix = "** ";

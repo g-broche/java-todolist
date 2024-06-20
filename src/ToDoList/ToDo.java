@@ -8,6 +8,9 @@ import Utils.Communication;
 import Utils.Validators;
 import Utils.XMLHandler;
 
+/**
+ * Class containing the run method with the application whole logic and bringing all the necessary class and methods together.
+ */
 public class ToDo {
     private List<TaskList> lists = new ArrayList<TaskList>();
     private TaskList activeList = null;
@@ -113,6 +116,10 @@ public class ToDo {
 
                 case SAVE:
                     this.handleSavingListsToXml();
+                    break;
+
+                case LOAD:
+                    this.handleLoadingListsFromXml();
                     break;
 
                 case HELP:
@@ -323,8 +330,28 @@ public class ToDo {
         return isValid;
     }
 
+    /**
+     * Saves all existing lists to an XML file
+     */
     private void handleSavingListsToXml(){
         XMLHandler xmlHandler = new XMLHandler();
         xmlHandler.writeToDoFile(this.lists);
+    }
+
+    /**
+     * Load previously saved lists into the current ToDo.lists and loads the last one as active list
+     */
+    private void handleLoadingListsFromXml(){
+        XMLHandler xmlHandler = new XMLHandler();
+        List<TaskList> retrievedLists = xmlHandler.loadToDoFromFile();
+        if (retrievedLists == null || retrievedLists.isEmpty()) {
+            return;
+        }
+        for (TaskList taskList : retrievedLists) {
+            this.lists.add(taskList);
+        }
+        this.activeList = this.lists.getLast();
+        Communication.printSuccessFeedback("Loaded list from saved file");
+        this.displayAllListsContent();
     }
 }

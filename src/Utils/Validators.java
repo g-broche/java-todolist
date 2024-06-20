@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import ToDoList.TaskList;
 
+/**
+ * Class providing static methods for the purpose of validating certain operations.
+ */
 public class Validators {
     /**
      * Defines allowed user command which correspond to the first word of user inputs
@@ -20,6 +23,7 @@ public class Validators {
         SWITCH,
         STOP,
         SAVE,
+        LOAD,
         HELP,
 
     };
