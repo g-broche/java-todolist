@@ -17,6 +17,7 @@ public class Validators {
         CREATE,
         ADD,
         DEL,
+        DELLIST,
         SHOW,
         SHOWALL,
         SHOWLISTS,
@@ -80,16 +81,16 @@ public class Validators {
     }
 
     /**
-     * Validate the inputed task index to remove from the list
-     * @param indexInput String corresponding to the required index value for task removal
-     * @param taskList TaskList from which a task removal request is ongoing
+     * Validate the inputed index to remove from the list
+     * @param indexInput String corresponding to the required index value for element removal
+     * @param list list from which an element removal request is ongoing
      * @return index to remove as Integer if input is not out of bounds, null otherwise
      */
-    public static Integer validateTaskRemovalRequest(String indexInput, TaskList taskList){
+    public static <E> Integer validateRemovalRequestForIndex(String indexInput, List<E> list){
         try {
             int indexToRemove = Integer.parseInt(indexInput);
-            int taskListedAmount = taskList.getTasks().size();
-            if(taskListedAmount == 0){
+            int listAmount = list.size();
+            if(listAmount == 0){
                 Communication.printErrorFeedback("The list is empty, nothing to remove");
                 return null;
             }
@@ -97,8 +98,8 @@ public class Validators {
                 Communication.printErrorFeedback("The index value must be above or equal to 0");
                 return null;
             }
-            if(indexToRemove >= taskListedAmount){
-                Communication.printErrorFeedback("The max valid index for removal is "+(taskListedAmount-1));
+            if(indexToRemove >= listAmount){
+                Communication.printErrorFeedback("The max valid index for removal is "+(listAmount-1));
                 return null;
             }
             return indexToRemove;

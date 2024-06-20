@@ -73,11 +73,11 @@ public class TaskList {
      */
     public boolean removeTask(int indexToRemove){
         try {
-            String taskToRemoved = this.tasks.remove(indexToRemove);
-            boolean isSuccess = !taskToRemoved.isEmpty();
+            String taskToRemove = this.tasks.remove(indexToRemove);
+            boolean isSuccess = !taskToRemove.isEmpty();
             Communication.printInstructionResult(
                 isSuccess,
-                "Task <"+taskToRemoved+"> has been removed",
+                "Task <"+taskToRemove+"> has been removed",
                 "Failed to remove task at index "+indexToRemove
                 );
             return isSuccess;
@@ -85,8 +85,6 @@ public class TaskList {
             Communication.printErrorFeedback(e.getMessage());
             return false;
         }
-        
-        
     }
 
     /**

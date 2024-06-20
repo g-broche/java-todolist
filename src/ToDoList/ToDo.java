@@ -91,6 +91,9 @@ public class ToDo {
                         this.handleTaskRemovalFromList(actionArgument, this.activeList);
                     }
                     break;
+                case DELLIST:
+                    this.handleListDeletion(actionArgument);
+                    break;
 
                 case SHOW:
                     if(this.isActiveListValid()){
@@ -206,13 +209,74 @@ public class ToDo {
             Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
             return;
         }
-        Integer indexToRemove = Validators.validateTaskRemovalRequest(inputedIndex, taskList);
+        Integer indexToRemove = Validators.validateRemovalRequestForIndex(inputedIndex, taskList.getTasks());
         boolean isRequestValid = indexToRemove != null;
         if(!isRequestValid){
             Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
             return;
         }
         taskList.removeTask(indexToRemove);
+    }
+
+    /**
+     * Handles the deletion of a task list
+     * @param inputedIndex provided index in initial user input at command call, if none a request will be made
+     */
+    private void handleListDeletion(String inputedIndex){
+        if(this.lists.isEmpty()){
+            Communication.printErrorFeedback("There are no initialized list of tasks currently, action cancelled");
+            return;
+        }
+        if(Validators.isStringNullOrEmptyOrBlank(inputedIndex)){
+            displayAllListsLabels();
+            inputedIndex = this.requestForUserInputedArgument("Input the number index of the list to delete");
+        }
+        boolean isRequestedInputStillNull = Validators.isStringNullOrEmptyOrBlank(inputedIndex);
+        if (isRequestedInputStillNull) {
+            Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
+            return;
+        }
+        try {
+            Integer indexToRemove = Validators.validateRemovalRequestForIndex(inputedIndex, this.lists);
+            String labelListToRemove = this.lists.get(indexToRemove).getLabel();
+            boolean isRequestValid = indexToRemove != null;
+            if(!isRequestValid){
+                Communication.printErrorFeedback("Invalid argument given, returning to main command flow");
+                return;
+            }
+            boolean isSuccess = this.deleteList(indexToRemove);
+            Communication.printInstructionResult(
+                isSuccess,
+                "List <"+labelListToRemove+"> has been removed",
+                "Failed to remove list at index "+indexToRemove
+                );
+        } catch (Exception e) {
+            Communication.printErrorFeedback(e.getMessage());
+        }
+    }
+
+    /**
+     * Delete a TaskList from ToDo.lists based on index requested. Will switch active TaskList to last of list if it was removed in the process
+     * or to null if lists is empty
+     * @param index index of list to delete
+     */
+    private boolean deleteList(int index){
+        try {
+            boolean isCurrentListForDeletion = this.lists.get(index).equals(this.activeList);
+            TaskList removedElement = this.lists.remove(index);
+            boolean isRemoved = removedElement != null ? true : false;
+            if(!isCurrentListForDeletion){
+                return isRemoved;
+            }
+            if(this.lists.isEmpty()){
+                this.activeList = null;
+                return isRemoved;
+            }
+            this.activeList = this.lists.getLast();
+            return isRemoved;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     /**
@@ -289,6 +353,7 @@ public class ToDo {
             int currentActiveListIndex = this.getListIndex(this.activeList);
             if (currentActiveListIndex == indexToSwitchTo){
                 Communication.printErrorFeedback("No change occured as this is already the active list");
+                return;
             }
             String previousListLabel = this.activeList.getLabel();
             this.activeList = this.lists.get(indexToSwitchTo);
@@ -312,6 +377,9 @@ public class ToDo {
      * Display the content of all managed TaskList
      */
     private void displayAllListsContent(){
+        if (this.lists.isEmpty()) {
+            Communication.printMessage("There are no initialized lists");
+        }
         Communication.printMessage("Listing content of all lists");
         for (TaskList taskList : lists) {
             taskList.displayTaskList();
