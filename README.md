@@ -13,4 +13,4 @@ As expected the project went deeper than what was covered in the initial course.
 Implemented management of todo lists through command lines by using user input for command and argument parsing.
 Also added commands to save existing todo lists into an xml file and loading of previously saved todo lists.
 
-For now the project is stopped as this was only intended to learn the basics of Java and see some of the differences compared to languages i've previously worked with (PHP / JS) before moving on bigger project and framework (likely spring boot)
+For now the project is stopped as this was only intended to learn the basics of Java and see some of the differences compared to languages i've previously worked with (PHP / JS) before moving on bigger java project and java framework (likely spring boot)
