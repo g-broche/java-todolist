@@ -1,1 +1,25 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><todo/>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<todo>
+    <list>
+        <label>list1</label>
+        <tasks>
+            <task>task_1-a</task>
+            <task>task_1-b</task>
+            <task>task_1-c</task>
+        </tasks>
+    </list>
+    <list>
+        <label>list2</label>
+        <tasks>
+            <task>task_2-a</task>
+            <task>task_2-b</task>
+            <task>task_2-c</task>
+        </tasks>
+    </list>
+    <list>
+        <label>list3</label>
+        <tasks>
+            <task>task_3-a</task>
+        </tasks>
+    </list>
+</todo>

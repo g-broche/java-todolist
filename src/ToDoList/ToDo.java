@@ -324,6 +324,7 @@ public class ToDo {
     }
 
     private void handleSavingListsToXml(){
-        XMLHandler.writeToDoFile(this.lists);
+        XMLHandler xmlHandler = new XMLHandler();
+        xmlHandler.writeToDoFile(this.lists);
     }
 }
