@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Scanner;
 import Utils.Communication;
 import Utils.Validators;
+import Utils.XMLHandler;
 
 public class ToDo {
     private List<TaskList> lists = new ArrayList<TaskList>();
@@ -108,6 +109,10 @@ public class ToDo {
 
                 case STOP:
                     mustKeepRunning = false;
+                    break;
+
+                case SAVE:
+                    this.handleSavingListsToXml();
                     break;
 
                 case HELP:
@@ -316,5 +321,9 @@ public class ToDo {
             Communication.printErrorFeedback("A list must be active for this command to work");
         }
         return isValid;
+    }
+
+    private void handleSavingListsToXml(){
+        XMLHandler.writeToDoFile(this.lists);
     }
 }

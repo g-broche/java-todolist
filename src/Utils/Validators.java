@@ -18,8 +18,10 @@ public class Validators {
         SHOWALL,
         SHOWLISTS,
         SWITCH,
+        STOP,
+        SAVE,
         HELP,
-        STOP
+
     };
 
     /**
