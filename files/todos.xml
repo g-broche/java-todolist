@@ -22,4 +22,12 @@
             <task>task_3-a</task>
         </tasks>
     </list>
+    <list>
+        <label>list4</label>
+        <tasks>
+            <task>task_4-a</task>
+            <task>task_4-b</task>
+            <task>task_4-c</task>
+        </tasks>
+    </list>
 </todo>
